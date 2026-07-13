@@ -1,0 +1,96 @@
+.place-card-wrapper {
+    list-style: none;
+}
+
+.place-card {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    background-color: #eddcd2;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(35, 18, 18, 0.1);
+    font-family: inherit;
+}
+
+.place-card-image {
+    width: 340px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.place-card-content {
+    padding: 16px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.place-card-content h3 {
+    font-size: 20px;
+    color: #231212;
+    margin: 0;
+    min-height: 32px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 2;
+}
+
+.place-card-address {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #4a3a35;
+    margin: 0;
+    min-height: 20px;
+}
+
+.place-card-description {
+    font-size: 14px;
+    color: #231212;
+    line-height: 1.5;
+    margin: 0;
+    min-height: 63px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 3;
+}
+
+.place-card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 20px 20px;
+    margin: 0;
+    margin-top: auto;
+}
+
+.badge-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #d29b79;
+    color: #231212;
+    border-radius: 32px;
+    padding: 6px 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.read-more-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #859765;
+    text-decoration: underline;
+}

@@ -1,0 +1,57 @@
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 32px;
+    padding: 48px 32px;
+}
+
+.hero-text {
+    flex: 1;
+    max-width: 550px;
+}
+
+.hero-text h1 {
+    font-size: 54px;
+    font-weight: 700;
+    color: #231212;
+    margin-bottom: 32px;
+    line-height: 64px;
+    text-align: left;
+    
+}
+
+.hero-text p {
+    font-size: 18px;
+    color: #231212;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.hero-image {
+    flex: 1;
+    max-width: 420px;
+    border-radius: 64px;
+    object-fit: cover;
+}
+
+.create-review-button {
+    background-color: #859765;
+    border: none;
+    color: #ffffff;
+    border-radius: 32px;
+    padding: 12px 12px;
+    font-size: 16px;
+    width: 160px;
+    cursor: pointer;
+}
+
+.info-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #eddcd2;
+    border-radius: 32px;
+    height: 180px;
+    padding: 20px 20px;
+}

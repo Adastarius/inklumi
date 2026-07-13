@@ -1,0 +1,59 @@
+.place-detail {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 32px;
+}
+
+.place-detail-top {
+    display: flex;
+    gap: 200px;
+    align-items: center;
+    margin-bottom: 48px;
+}
+
+.place-detail-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.place-detail-info h1 {
+    font-size: 42px;
+    color: #231212;
+    margin: 0;
+}
+
+.place-detail-address {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: #4a3a35;
+    margin: 0;
+}
+
+.place-detail-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.place-detail-image {
+    flex: 1;
+    max-width: 400px;
+    border-radius: 16px;
+    object-fit: cover;
+    max-height: 320px;
+}
+
+.place-detail-description {
+    font-size: 16px;
+    color: #231212;
+    line-height: 1.7;
+    max-width: 700px;
+    text-align: left;
+}

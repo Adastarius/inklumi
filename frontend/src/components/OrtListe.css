@@ -1,0 +1,70 @@
+.checkbox-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkbox-liste label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-grid {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+    justify-content: center;
+}
+
+.filter-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #e7ccc3;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 20px;
+    cursor: pointer;
+    color: #231212;
+    font-family: inherit;
+}
+
+.filter-box:hover {
+    background-color: #e4cbba;
+}
+
+.filter-box[aria-expanded="true"] {
+    background-color: #d29b79;
+}
+
+.filter-label {
+    display: block;
+    font-size: 14px;
+    color: #4a3a35;
+}
+
+.filter-item {
+    position: relative;
+}
+
+.filter-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(35, 18, 18, 0.15);
+    padding: 20px;
+    z-index: 10;
+    min-width: 280px;
+}
+
+.places-list {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+}

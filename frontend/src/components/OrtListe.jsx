@@ -1,49 +1,146 @@
 import testOrte from '../data/testOrte';
 import OrtCard from './OrtCard';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import './OrtListe.css';
+import { LayoutGrid, MapPin, Accessibility } from 'lucide-react';
+
+const disabilities = ["Sehbehinderung", "Hörbehinderung"]
+const districts = ["Charlottenburg-Wilmersdorf", "Friedrichshain-Kreuzberg", "Lichtenberg", "Marzahn-Hellersdorf", "Mitte", "Neukölln", "Pankow", "Reinickendorf", "Spandau", "Steglitz-Zehlendorf", "Tempelhof-Schöneberg", "Treptow-Köpenick"]
+const categories = ["Kultur", "Freizeit", "Gesundheit", "Verkehr", "Restaurants"]
 
 function OrtListe() {
-    const [filter, setFilter] = useState("alle")
-    const [bezirkFilter, setBezirkFilter] = useState("alle")
+    const [disabilityFilter, setDisabilityFilter] = useState([])
+    const [districtFilter, setDistrictFilter] = useState([])
+    const [categoryFilter, setCategoryFilter] = useState([])
+    const [openedFilter, setOpenedFilter] = useState(null)
 
-    const gefilterteOrte = testOrte.filter((ort) => {
-        const passtBadge = filter === "alle" || ort.badges.includes(filter);
-        const passtBezirk = bezirkFilter === "alle" || ort.bezirk === bezirkFilter;
-        return passtBadge && passtBezirk;
+    //Wenn Wert schon ausgewählt, wird es beim abwählen aus dem Array entfernt, ansonsten wird es hinzugefügt
+    function handleFilterOptionChange(value, currentValues, setValues) {
+        if (currentValues.includes(value)) {
+            setValues(currentValues.filter((v) => v !== value))
+        } else {
+            setValues([...currentValues, value])
+        }
+    }
+    function toggleFilter(name) {
+        if (openedFilter === name) {
+            setOpenedFilter(null)
+        } else {
+            setOpenedFilter(name)
+        }
+    }
+
+    function deleteFilterSelection() {
+        setDisabilityFilter([])
+        setDistrictFilter([])
+        setCategoryFilter([])
+        setOpenedFilter(null)
+    }
+
+    useEffect(() => {
+        function handleKeyDown(e) {
+            if (e.key === "Escape") {
+                setOpenedFilter(null);
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
+
+    const filteredPlaces = testOrte.filter((ort) => {
+        const matchingDisability = disabilityFilter.length === 0 || disabilityFilter.some((b) => ort.badges.includes(b));
+        const matchingDistrict = districtFilter.length === 0 || districtFilter.includes(ort.bezirk);
+        const matchingCategory = categoryFilter.length === 0 || categoryFilter.includes(ort.kategorie);
+        return matchingDisability && matchingDistrict && matchingCategory;
     });
 
     return (
         <div>
-            <div role="group" aria-label="Nach Beeinträchtigungsart filtern">
-                <button onClick={() => setFilter("alle")} aria-pressed={filter === "alle"}>
-                    Alle
+            <div className="filter-grid">
+                <div className="filter-item">
+                    <button className="filter-box" onClick={() => toggleFilter("kategorie")} aria-expanded={openedFilter === "kategorie"}>
+                        <LayoutGrid aria-hidden="true" size={20} />
+                        <span className="filter-label">Kategorie</span>
                     </button>
-                <button onClick={() => setFilter("Sehbehinderung")} aria-pressed={filter === "Sehbehinderung"}>
-                    Sehbehinderung
-                    </button>
-                <button onClick={() => setFilter("Hörbehinderung")} aria-pressed={filter === "Hörbehinderung"}>
-                    Hörbehinderung
-                    </button>
-            </div>
 
-            <div>
-                <label htmlFor="bezirk-select">Nach Bezirk filtern</label>
-                <select
-                    id="bezirk-select"
-                    value={bezirkFilter}
-                    onChange={(e) => setBezirkFilter(e.target.value)}
-                >
-                    <option value="alle">Alle Bezirke</option>
-                    <option value="Mitte">Mitte</option>
-                    <option value="Charlottenburg-Wilmersdorf">Charlottenburg-Wilmersdorf</option>
-                    <option value="Steglitz-Zehlendorf">Steglitz-Zehlendorf</option>
-                </select>
+                    {openedFilter === "kategorie" && (
+                        <div className="filter-options">
+                            <div role="group" aria-label="Kategorie" className="checkbox-liste">
+                                {categories.map((category) => (
+                                    <label key={category}>
+                                    <input
+                                        type="checkbox"
+                                        checked={categoryFilter.includes(category)}
+                                        onChange={() => handleFilterOptionChange(category, categoryFilter, setCategoryFilter)}
+                                    />
+                                    {category}
+                                </label>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                
+                <div className="filter-item">
+                    <button className="filter-box" onClick={() => toggleFilter("bezirk")} aria-expanded={openedFilter === "bezirk"}>
+                        <MapPin aria-hidden="true" size={20} />
+                        <span className="filter-label">Bezirk</span>
+                    </button>
+
+                    {openedFilter === "bezirk" && (
+                        <div className="filter-options">
+                            <div role="group" aria-label="Bezirk" className="checkbox-liste">
+                                {districts.map((district) => (
+                                    <label key={district}>
+                                        <input
+                                            type="checkbox"
+                                            checked={districtFilter.includes(district)}
+                                            onChange={() => handleFilterOptionChange(district, districtFilter, setDistrictFilter)}
+                                        />
+                                        {district}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                
+                <div className="filter-item">
+                    <button className="filter-box" onClick={() => toggleFilter("beeintraechtigung")} aria-expanded={openedFilter === "beeintraechtigung"}>
+                        <Accessibility aria-hidden="true" size={20} />
+                        <span className="filter-label">Beeinträchtigung</span>
+                    </button>
+
+                    {openedFilter === "beeintraechtigung" && (
+                    <div className="filter-options">
+                        <div role="group" aria-label="Beeinträchtigung" className="checkbox-liste">
+                            {disabilities.map((badge) => (
+                                <label key={badge}>
+                                    <input
+                                        type="checkbox"
+                                        checked={disabilityFilter.includes(badge)}
+                                        onChange={() => handleFilterOptionChange(badge, disabilityFilter, setDisabilityFilter)}
+                                    />
+                                    {badge}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    )}
+                </div>
+                
+                <button className="filter-box" onClick={deleteFilterSelection}>Auswahl löschen</button>
             </div>
-            <ul>
-            {gefilterteOrte.map((ort) => (
+                     
+            <ul className="places-list">
+            {filteredPlaces.map((ort) => (
                 <OrtCard key={ort.id} ort={ort} />
             ))}
-        </ul>
+            </ul>
         </div>
     );
 }

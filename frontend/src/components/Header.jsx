@@ -3,6 +3,7 @@ import './Header.css'
 function Header() {
     return (
         <header className="header">
+            <div className="logo"></div>
             <nav>
                 <ul>
                     <li><a href="#">Startseite</a></li>
@@ -10,7 +11,7 @@ function Header() {
                     <li><a href="#">Kontakt</a></li>
                 </ul>
             </nav>
-            <button>Login</button>
+            <button className="login-button">Login</button>
         </header>
     );
 }
