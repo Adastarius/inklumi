@@ -32,11 +32,11 @@ function OrtCard({ ort }) {
                 </div>
                 <ul className="place-card-badges">
                     {ort.badges.map((badge) => {
-                        const Icon = badgeIcons[badge];
+                        const Icon = badgeIcons[badge.name];
                         return (
-                            <li key={badge} className="badge-pill">
+                            <li key={badge.id} className="badge-pill">
                                 <Icon aria-hidden="true" size={14} />
-                                {badge}
+                                {badge.name}
                             </li>
                         );}
                     )}

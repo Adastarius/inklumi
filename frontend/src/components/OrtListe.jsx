@@ -1,4 +1,3 @@
-import testOrte from '../data/testOrte';
 import OrtCard from './OrtCard';
 import { useState, useEffect } from 'react';
 import './OrtListe.css';
@@ -9,17 +8,30 @@ const districts = ["Charlottenburg-Wilmersdorf", "Friedrichshain-Kreuzberg", "Li
 const categories = ["Kultur", "Freizeit", "Gesundheit", "Verkehr", "Restaurants"]
 
 function OrtListe() {
+    const [orte, setOrte] = useState([])
+    const [loadStatus, setLoadStatus] = useState("laden")
+
     const [disabilityFilter, setDisabilityFilter] = useState([])
     const [districtFilter, setDistrictFilter] = useState([])
     const [categoryFilter, setCategoryFilter] = useState([])
     const [openedFilter, setOpenedFilter] = useState(null)
 
+    useEffect(() => {
+        fetch("http://localhost:3000/api/orte")
+            .then((res) => res.json())
+            .then((data) => {
+                setOrte(data);
+                setLoadStatus("fertig");
+            })
+            .catch(() => setLoadStatus("Fehler"));
+    }, []);
+
     //Wenn Wert schon ausgewählt, wird es beim abwählen aus dem Array entfernt, ansonsten wird es hinzugefügt
-    function handleFilterOptionChange(value, currentValues, setValues) {
-        if (currentValues.includes(value)) {
-            setValues(currentValues.filter((v) => v !== value))
+    function handleFilterOptionChange(filterOption, currentFilterOptions, setFilter) {
+        if (currentFilterOptions.includes(filterOption)) {
+            setFilter(currentFilterOptions.filter((option) => option !== filterOption))
         } else {
-            setValues([...currentValues, value])
+            setFilter([...currentFilterOptions, filterOption])
         }
     }
     function toggleFilter(name) {
@@ -51,12 +63,20 @@ function OrtListe() {
         };
     }, []);
 
-    const filteredPlaces = testOrte.filter((ort) => {
-        const matchingDisability = disabilityFilter.length === 0 || disabilityFilter.some((b) => ort.badges.includes(b));
+    const filteredPlaces = orte.filter((ort) => {
+        const matchingDisability = disabilityFilter.length === 0 || disabilityFilter.some((checked) => ort.badges.some((badge) => badge.name === checked));
         const matchingDistrict = districtFilter.length === 0 || districtFilter.includes(ort.bezirk);
         const matchingCategory = categoryFilter.length === 0 || categoryFilter.includes(ort.kategorie);
         return matchingDisability && matchingDistrict && matchingCategory;
     });
+
+    if (loadStatus === "laden") {
+            return <p>Orte werden geladen...</p>;
+        }
+
+    if (loadStatus === "Fehler") {
+        return <p>Die Orte konnten leider nicht geladen werden.</p>;
+    }
 
     return (
         <div>

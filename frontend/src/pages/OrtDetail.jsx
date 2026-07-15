@@ -1,6 +1,5 @@
 import { useParams } from'react-router-dom';
-import testOrte from '../data/testOrte';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { MapPin, Eye, Ear } from 'lucide-react';
 import './OrtDetail.css';
 
@@ -8,15 +7,37 @@ const badgeIcons = { Sehbehinderung: Eye, Hörbehinderung: Ear};
 
 function OrtDetail() {
     const { id } = useParams();
-    const ort = testOrte.find((o) => o.id === Number(id)); //o steht für jeden Ort in den Testorten, id der orte wird mit der id aus der URL verglichen
+    const [ort, setOrt] = useState(null);
+    const [loadStatus, setLoadStatus] = useState("laden");
     const ueberschriftRef = useRef(null);
 
     useEffect(() => {
-        ueberschriftRef.current?.focus();
-    }, []);
+        fetch(`http://localhost:3000/api/orte/${id}`)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Ort nicht gefunden");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                setOrt(data);
+                setLoadStatus("fertig");
+            })
+            .catch(() => setLoadStatus("Fehler"));
+    }, [id]);
 
-    if (!ort) {
-        return <main>Ort nicht gefunden.</main>
+    useEffect(() => {
+        if (loadStatus === "fertig") {
+            ueberschriftRef.current?.focus();
+        }
+    }, [id]);
+
+    if (loadStatus === "Fehler") {
+        return <main>Ort nicht gefunden.</main>;
+    }
+    
+    if (loadStatus === "laden") {
+        return <main>Ort wird geladen...</main>;
     }
 
     return (
@@ -34,11 +55,11 @@ function OrtDetail() {
 
                     <ul className="place-detail-badges">
                         {ort.badges.map((badge) => {
-                            const Icon = badgeIcons[badge];
+                            const Icon = badgeIcons[badge.name];
                             return (
-                                <li key={badge} className="badge-pill">
+                                <li key={badge.id} className="badge-pill">
                                     <Icon aria-hidden="true" size={14} />
-                                    {badge}
+                                    {badge.name}
                                 </li>
                             );
                         })}
