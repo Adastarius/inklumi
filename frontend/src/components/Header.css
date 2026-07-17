@@ -38,4 +38,17 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #231212;
+    font-weight: 500;
 }

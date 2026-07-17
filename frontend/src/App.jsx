@@ -4,20 +4,26 @@ import Footer from './components/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Startseite from './pages/Startseite'
 import OrtDetail from './pages/OrtDetail'
+import Login from './pages/Login'
+import Registrieren from './pages/Registrieren'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <BrowserRouter>
-    <div className="app-layout">
-      <Header />
-      <Routes>
-        <Route path="/" element={<Startseite />} />
-        <Route path="/ort/:id" element={<OrtDetail />} />
-      </Routes>
-      <Footer />
-    </div>
-    </BrowserRouter>
-    
+    <AuthProvider>
+      <BrowserRouter>
+        <div className="app-layout">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Startseite />} />
+            <Route path="/ort/:id" element={<OrtDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registrieren" element={<Registrieren />} />
+          </Routes>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
