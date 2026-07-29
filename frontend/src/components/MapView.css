@@ -1,0 +1,32 @@
+.map-layout {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.map-container-wrapper {
+    flex: 1;
+    min-width: 0;
+    transition: flex-basis 0.3s ease;
+}
+
+.map-sidepanel {
+    flex: 0 0 0;
+    width: 0;
+    overflow: hidden;
+    transition: flex-basis 0.3s ease, width 0.3s ease;
+}
+
+.map-sidepanel.is-visible {
+    flex: 0 0 300px;
+    width: 300px;
+    padding: 1rem;
+    border: none;
+    border-radius: 16px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #eddcd2;
+}

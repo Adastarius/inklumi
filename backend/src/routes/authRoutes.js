@@ -21,19 +21,23 @@ const registerLimiter = rateLimit({
 
 router.post("/registrieren", registerLimiter, async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { email, password, username } = req.body
 
-        if (!email || !password) {
-            return res.status(400).json({ fehler: "E-Mail und Passwort sind erforderlich."} )
+        if (!email || !password || !username) {
+            return res.status(400).json({ error: "E-Mail, Nutzername und Passwort sind erforderlich."} )
+        }
+
+        if (!/^[a-zA-Z0-9_-]{3,20}$/.test(username)) {
+            return res.status(400).json({ error: "Nutzername muss 3-20 Zeichen lang sein (Buchstaben, Zahlen, _ und -)."})
         }
 
         if (!isPasswordSave(password)) {
-            return res.status(400).json({ fehler: "Passwort muss mindestens 8 Zeichen, einen Groß-, einen Kleinbuchstaben und eine Zahl enthalten."})
+            return res.status(400).json({ error: "Passwort muss mindestens 8 Zeichen, einen Groß-, einen Kleinbuchstaben und eine Zahl enthalten."})
         }
 
-        const existingUser = await prisma.user.findUnique({ where: { email } })
+        const existingUser = await prisma.user.findFirst({ where: { OR: [{ email }, {username}] }, })
         if (existingUser) {
-            return res.status(409).json({ fehler: "Diese E-Mail ist bereits registriert."} )
+            return res.status(409).json({ error: existingUser.email === email ? "Diese E-Mail ist bereits registriert." : "Dieser Nutzername ist bereits vergeben." } )
         }
 
         const passwordHash = await bcrypt.hash(password, 10)
@@ -42,6 +46,7 @@ router.post("/registrieren", registerLimiter, async (req, res) => {
             data: {
                 email,
                 password: passwordHash,
+                username,
             },
         })
 
@@ -51,27 +56,28 @@ router.post("/registrieren", registerLimiter, async (req, res) => {
             { expiresIn: "7d" }
         )
 
-        res.status(201).json({ token, email: newUser.email })
+        res.status(201).json({ token, username: newUser.username })
     } catch (error) {
-        res.status(500).json({ fehler: "Registrierung fehlgeschlagen." })
+        console.error(error)
+        res.status(500).json({ error: "Registrierung fehlgeschlagen." })
     }
 })
 
 router.post("/login", loginLimiter, async (req, res) => {
     try {
-        const { email, password } = req.body
-        if (!email || !password) {
+        const { identifier, password } = req.body
+        if (!identifier || !password) {
             return res.status(400).json({ fehler: "E-Mail oder Passwort sind erforderlich." })
         }
 
-        const user = await prisma.user.findUnique({ where: { email } })
+        const user = await prisma.user.findFirst({ where: { OR: [{ email: identifier }, { username: identifier }] } })
         if (!user) {
-            return res.status(401).json({ fehler: "E-Mail oder Passwort ist falsch"})
+            return res.status(401).json({ error: "Anmeldedaten sind falsch"})
         }
 
         const passwordMatches = await bcrypt.compare(password, user.password)
         if (!passwordMatches) {
-            return res.status(401).json({ fehler: "E-Mail oder Passwort ist falsch"})
+            return res.status(401).json({ error: "Anmeldedaten sind falsch"})
         }
 
         const token = jwt.sign(
@@ -79,10 +85,10 @@ router.post("/login", loginLimiter, async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         )
-        res.json({ token, email: user.email })
+        res.json({ token, email: user.email, username: user.username })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ fehler: "Login fehlgeschlagen." })
+        res.status(500).json({ error: "Login fehlgeschlagen." })
     }
 })
 
@@ -102,4 +108,4 @@ function isPasswordSave(password) {
     return minLength && hasUpperCaseLetter && hasLowerCaseLetter && hasNumber
 }
 
-export default router;
+export default router

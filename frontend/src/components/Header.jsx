@@ -16,7 +16,7 @@ function Header() {
             <div className="logo"></div>
             <nav>
                 <ul>
-                    <li><a href="#">Startseite</a></li>
+                    <Link to="/">Startseite</Link> 
                     <li><a href="#">Infos</a></li>
                     <li><a href="#">Kontakt</a></li>
                 </ul>
@@ -36,4 +36,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default Header

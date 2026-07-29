@@ -12,7 +12,6 @@
 }
 
 .place-detail-info {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -56,4 +55,5 @@
     line-height: 1.7;
     max-width: 700px;
     text-align: left;
+    margin-bottom: 80px;
 }

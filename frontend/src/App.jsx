@@ -3,10 +3,11 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Startseite from './pages/Startseite'
-import OrtDetail from './pages/OrtDetail'
+import PlaceDetail from './pages/PlaceDetail'
 import Login from './pages/Login'
-import Registrieren from './pages/Registrieren'
+import Register from './pages/Register'
 import { AuthProvider } from './context/AuthContext'
+import NewPlaceForm from './components/NewPlaceForm'
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Startseite />} />
-            <Route path="/ort/:id" element={<OrtDetail />} />
+            <Route path="/orte/:id" element={<PlaceDetail />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/registrieren" element={<Registrieren />} />
+            <Route path="/registrieren" element={<Register />} />
+            <Route path="/orte/neu" element={<NewPlaceForm />} />
           </Routes>
           <Footer />
         </div>

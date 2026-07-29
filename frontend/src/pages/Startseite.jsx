@@ -1,7 +1,46 @@
-import OrtListe from '../components/OrtListe';
+import PlacesList from '../components/PlacesList'
 import './Startseite.css'
+import { apiFetch } from '../services/api.js'
+import { useState, useEffect } from 'react'
+import MapView from '../components/MapView'
+import PlaceFilters from '../components/PlaceFilters'
+import NewPlaceButton from '../components/NewPlaceButton'
+import { List, Map } from 'lucide-react'
 
 function Startseite() {
+    const [places, setPlaces] = useState([])
+    const [loadStatus, setLoadStatus] = useState("laden")
+    const [view, setView] = useState("list")
+
+    const [disabilityFilter, setDisabilityFilter] = useState([])
+    const [districtFilter, setDistrictFilter] = useState([])
+    const [categoryFilter, setCategoryFilter] = useState([])
+    
+
+    useEffect(() => {
+        apiFetch("/orte")
+            .then((data) => {
+                setPlaces(data)
+                setLoadStatus("fertig")
+            })
+            .catch(() => setLoadStatus("Fehler"))
+    }, [])
+
+    const filteredPlaces = places.filter((place) => {
+        const matchingDisability = disabilityFilter.length === 0 || disabilityFilter.some((checked) => (place.badges ?? []).some((badge) => badge.category === checked));
+        const matchingDistrict = districtFilter.length === 0 || districtFilter.includes(place.district);
+        const matchingCategory = categoryFilter.length === 0 || categoryFilter.includes(place.category);
+        return matchingDisability && matchingDistrict && matchingCategory;
+    })
+
+    function refetchPlaces() {
+        apiFetch("/orte")
+            .then(setPlaces)
+            .catch(() => setLoadStatus("Fehler"))
+    }
+
+    console.log(places)
+    console.log(filteredPlaces)
     return (
         <main>
             <section className="hero">
@@ -11,15 +50,56 @@ function Startseite() {
                         <p>Mit der Filterfunktion kannst du dir Orte nach Bezirk, Beeinträchtigung 
                         oder anderen Kategorien anzeigen lassen. Füge eigene Bewertungen hinzu und markiere barrierefreie Orte!
                         </p>
-                        <button className="create-review-button">Ort bewerten</button>
+                        <a href="#places-area" className="create-review-button" onClick={() => setView("map")}>
+                            Ort bewerten
+                        </a>
                     </div>
                 </div>
 
                 <img className="hero-image" src="/31751909_7840255.jpg" alt="Eine blinde Frau und ein Mann mit einer Armprothese stehen lächelnd nebeneinander" />
             </section>
-            <OrtListe />
+
+            <section id="places-area" className="places-section">
+                <div className="places-section-header">
+                
+
+                    <PlaceFilters
+                        categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter}
+                        districtFilter={districtFilter} setDistrictFilter={setDistrictFilter}
+                        disabilityFilter={disabilityFilter} setDisabilityFilter={setDisabilityFilter}
+                    />
+
+                    <NewPlaceButton />
+                </div>
+
+                <div role="tablist" aria-label="Ansicht wählen" className="view-toggle">
+                    <button role="tab" id="tab-list" aria-selected={view === "list"} aria-controls="panel-list" onClick={() => setView("list")}>
+                        <List size={18} strokeWidth={2} aria-hidden="true" />
+                        Listenansicht
+                    </button>
+                    <button role="tab" id="tab-map" aria-selected={view === "map"} aria-controls="panel-map" onClick={() => setView("map")}>
+                        <Map size={18} strokeWidth={2} aria-hidden="true" />
+                        Kartenansicht
+                    </button>
+                </div>
+
+            {loadStatus === "laden" && <p>Orte werden geladen...</p>}
+            {loadStatus === "Fehler" && <p role="alert">Orte konnten nicht geladen werden.</p>}
+            
+            {loadStatus === "fertig" && (
+                <>
+                    <div role="tabpanel" id="panel-list" aria-labelledby="tab-list" hidden={view !== "list"}>
+                        <PlacesList places={filteredPlaces} />
+                    </div>
+
+                    <div role="tabpanel" id="panel-map" aria-labelledby="tab-map" hidden={view !== "map"}>
+                        <MapView places={filteredPlaces} />
+                    </div>
+                </>
+            )}
+            </section>
         </main>
     )
 }
 
-export default Startseite;
+export default Startseite

@@ -12,16 +12,15 @@
 
 .filter-grid {
     display: flex;
-    gap: 32px;
+    gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 60px;
     justify-content: center;
 }
 
 .filter-box {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
     background-color: #e7ccc3;
     border: none;
     border-radius: 16px;
@@ -29,13 +28,14 @@
     cursor: pointer;
     color: #231212;
     font-family: inherit;
-}
-
-.filter-box:hover {
-    background-color: #e4cbba;
+    font-weight: 600;
 }
 
 .filter-box[aria-expanded="true"] {
+    background-color: #d29b79;
+}
+
+.filter-box:active {
     background-color: #d29b79;
 }
 
@@ -58,7 +58,7 @@
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(35, 18, 18, 0.15);
     padding: 20px;
-    z-index: 10;
+    z-index: 2000;
     min-width: 280px;
 }
 
