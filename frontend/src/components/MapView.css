@@ -5,6 +5,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
+    position: relative;
 }
 
 .map-container-wrapper {
@@ -29,4 +30,18 @@
     padding-top: 20px;
     padding-bottom: 20px;
     background-color: #eddcd2;
+}
+
+.map-hint-overlay {
+    position: absolute;
+    z-index: 1999;
+    font-size: 12px;
+    font-weight: 500;
+    background-color: #eddcd2;
+    border-radius: 32px;
+    padding: 4px 4px;
+    top: 10px;
+    color: #231212;
+    box-shadow: 0 2px 8px rgba(35, 18, 18, 0.1);
+    left: 80px;
 }

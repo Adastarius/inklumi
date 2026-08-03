@@ -21,7 +21,7 @@ function Login() {
                 body: JSON.stringify({ identifier, password })
             })
 
-            login(data.token, data.username)
+            login(data.token, data.email, data.username)
             navigate("/")
         } catch (error) {
             setError(error.message)

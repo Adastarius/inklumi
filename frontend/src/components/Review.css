@@ -38,7 +38,7 @@
 }
 
 .place-image {
-    max-width: 260px;
+    max-width: 280px;
 }
 
 .place-info {
@@ -71,15 +71,26 @@
 }
 
 .info-header {
-    display: grid;
-    grid-template-columns: 270px 0px;
     margin-bottom: 20px;
     text-align: left;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
 }
 
 .close-button {
     background-color: #eddcd2;
     border: none;
     cursor: pointer;
+    height: 20px;
 }
 
+.place-description {
+    font-size: 14px;
+    color: #231212;
+    display: flex;
+    align-self: flex-start;
+    margin-top: 20px;
+    text-align: left;
+}

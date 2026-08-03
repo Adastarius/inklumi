@@ -47,8 +47,9 @@
     gap: 12px;
 }
 
-.user-email {
+.username {
     font-size: 14px;
     color: #231212;
     font-weight: 500;
+    text-decoration: none;
 }

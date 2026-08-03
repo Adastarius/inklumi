@@ -22,7 +22,8 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
     const [allBadges, setAllBadges] = useState([])
     const [reviewText, setReviewText] = useState("")
     const [district, setDistrict] = useState("")
-    const [picture, setPicture] = useState("")
+    const [pictureFile, setPictureFile] = useState(null)
+    const [uploadStatus, setUploadStatus] = useState("idle") //idle | hochladen | fertig | fehler
 
     useEffect(() => {
         apiFetch("/badges")
@@ -65,6 +66,8 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
 
         setIsSent(true)
         try {
+            const pictureUrl = pictureFile ? await handleUploadImage(pictureFile) : null
+
             const newPlace = await apiFetch("/orte/neu", {
                 method: "POST",
                 body: JSON.stringify({
@@ -77,7 +80,7 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
                     badgeIds: selectedBadges,
                     reviewText,
                     district,
-                    picture,
+                    picture: pictureUrl,
                 }),
             })
             navigate("/")
@@ -93,6 +96,35 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
             setSelectedBadges(selectedBadges.filter((id) => id !== badgeId))
         } else {
             setSelectedBadges([...selectedBadges, badgeId])
+        }
+    }
+
+    async function handleUploadImage(file) {
+        if (!file) return null
+
+        setUploadStatus("hochladen")
+
+        const formData = new FormData()
+        formData.append('image', file)
+
+        try {
+            const res = await fetch("http://localhost:3000/api/upload", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData,
+            })
+
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.error)
+
+            setUploadStatus("fertig")
+            return data.url
+        } catch (error) {
+            console.error(error)
+            setUploadStatus("fehler")
+            return null
         }
     }
 
@@ -184,14 +216,14 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
                             <option value="Sonstiges">Sonstiges</option>
                     </select>
 
-                    <label htmlFor="place-picture">Bild-URL (optional)</label>
+                    <label htmlFor="place-picture">Bild (optional)</label>
                     <input
                         id="place-picture"
-                        type="url"
-                        value={picture}
-                        onChange={(e) => setPicture(e.target.value)}
-                        placeholder="https://..."
+                        type="file"
+                        accept="image/jpeg, image/png, image/webp"
+                        onChange={(e) => setPictureFile(e.target.files[0])}
                     />
+                    {uploadStatus === "hochladen" && <p aria-live="polite">Bild wird hochgeladen...</p>}
 
                     <label htmlFor="place-description">Beschreibung</label>
                     <textarea

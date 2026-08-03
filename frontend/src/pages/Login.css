@@ -11,9 +11,12 @@
     align-items: flex-start;
 }
 
-#identifier,
 #password,
-#username {
+#username,
+#identifier,
+#email,
+#current-password,
+#new-password {
     width: 250px;
     border: 1px solid lightgrey;
     background-color: rgb(238, 235, 235);
@@ -33,7 +36,8 @@
     gap: 20px;
 }
 
-.auth-formular button {
+.auth-formular button,
+.user-page button {
     background-color: #7f5f77;
     border: none;
     border-radius: 32px;
@@ -44,4 +48,20 @@
     cursor: pointer;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.password-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-greeting {
+    margin-top: 40px;
 }

@@ -56,7 +56,7 @@ router.post("/registrieren", registerLimiter, async (req, res) => {
             { expiresIn: "7d" }
         )
 
-        res.status(201).json({ token, username: newUser.username })
+        res.status(201).json({ token, email: newUser.email, username: newUser.username })
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Registrierung fehlgeschlagen." })
@@ -92,12 +92,71 @@ router.post("/login", loginLimiter, async (req, res) => {
     }
 })
 
-router.get("/me", authMiddleware, async (req, res) => {
-    const user = await prisma.user.findUnique({
-        where: { id: req.userId },
-        select: { id: true, email: true },
-    })
-    res.json(user)
+router.patch("/me", authMiddleware, async (req, res) => {
+    try {
+        const { email, username } = req.body
+
+        if (!email || !username) {
+            return res.status(400).json({ error: "E-Mail und Nutzername sind erforderlich."})
+        }
+
+        if (!/^[a-zA-Z0-9_-]{3,20}$/.test(username)) {
+            return res.status(400).json({ error: "Nutzername muss 3-20 Zeichen lang sein (Buchstaben, Zeichen, - und _)."})
+        }
+
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                OR: [{ email }, { username }],
+                NOT: { id: req.userId },
+            },
+        })
+
+        if (existingUser) {
+            return res.status(409).json({ error: existingUser.email === email ? "Diese E-Mail ist bereits vergeben" : "Der Nutzername ist bereits vergeben"})
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: req.userId },
+            data: { email, username },
+            select: { id: true, email: true, username: true },
+        })
+
+        res.json(updatedUser)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Profil konnte nicht akutalisiert werden." })
+    }
+})
+
+router.patch("/me/password", authMiddleware, async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ error: "Aktuelles und neues Passwort sind erforderlich"})
+        }
+
+        if (!isPasswordSave(newPassword)) {
+            return res.status(400).json({ error: "Neues Passwort muss mindestens 8 Zeichen, Groß- und Kleinbuchstaben sowie Zahlen enthalten."})
+        }
+
+        const user = await prisma.user.findUnique({ where: { id: req.userId } })
+
+        const passwordMatches = await bcrypt.compare(currentPassword, user.password)
+        if (!passwordMatches) {
+            return res.status(401).json({ error: "Aktuelles Passwort ist falsch."})
+        }
+
+        const newPasswordHash = await bcrypt.hash(newPassword, 10)
+        await prisma.user.update({
+            where: { id: req.userId },
+            data: { password: newPasswordHash},
+        })
+
+        res.json({ success: true })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Passwort konnte nicht geändert werden."})
+    }
 })
 
 function isPasswordSave(password) {

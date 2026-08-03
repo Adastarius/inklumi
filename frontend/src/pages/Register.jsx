@@ -23,7 +23,7 @@ function Register() {
                 body: JSON.stringify({ email, password, username })
             })
 
-            login(data.token, data.username)
+            login(data.token, data.email, data.username)
             navigate("/")
         } catch (error) {
             console.error(error)

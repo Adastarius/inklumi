@@ -7,6 +7,7 @@ import helmet from 'helmet'
 import reviewRoutes from './src/routes/reviewRoutes.js'
 import badgeRoutes from './src/routes/badgeRoutes.js'
 import geocode from './src/routes/geocode.js'
+import uploadRoutes from './src/routes/uploadRoutes.js'
 
 const app = express();
 const PORT = 3000;
@@ -24,6 +25,8 @@ app.use("/api/bewertungen", reviewRoutes)
 app.use("/api/badges", badgeRoutes)
 
 app.use("/api", geocode)
+
+app.use("/api", uploadRoutes)
 
 app.get("/", (req, res) => {
     res.send("Backend läuft");

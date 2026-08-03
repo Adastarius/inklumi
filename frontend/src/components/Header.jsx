@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function Header() {
-    const { token, email, logout } = useAuth()
+    const { token, email, logout, username } = useAuth()
     const navigate = useNavigate()
 
     function handleLogout() {
@@ -24,7 +24,7 @@ function Header() {
 
             {token ? (
                 <div className="user-area">
-                    <span className="user-email">{email}</span>
+                    <Link to ="/user" className="username">{username}</Link>
                     <button className="login-button" onClick={handleLogout}>
                         Logout
                     </button>

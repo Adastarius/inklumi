@@ -121,11 +121,11 @@ router.post('/neu', authMiddleware, async (req, res) => {
                     source: 'user',
                     status: 'approved',
                     createdById: req.userId,
-                    reviews: badgeIds?.length > 0 && reviewText ? {
+                    reviews: badgeIds?.length > 0 || reviewText ? {
                         create: {
-                            text: reviewText,
+                            text: reviewText ? reviewText : "Kein Bewertungstext vorhanden.",
                             userId: req.userId,
-                            badges: { connect: badgeIds.map((id) => ({ id })) }
+                            badges: { connect: (badgeIds ?? []).map((id) => ({ id })) }
                         },
                     } : undefined,
                     picture: picture?.trim() || null,
