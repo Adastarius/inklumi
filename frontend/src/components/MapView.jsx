@@ -64,11 +64,9 @@ function MapView({ places }) {
 
             {/* with aria-live screenreader recognizes changes without moving focus */}
             <aside aria-live="polite" className={`map-sidepanel ${selectedPlace ? 'is-visible' : ''}`}>
-                {selectedPlace ? (
+                {selectedPlace &&
                     <PlaceInfo place={selectedPlace} onClose={() => setSelectedId(null)}/>
-                ) : (
-                    <p>Wähle einen Ort auf der Karte, um mehr Informationen zu bekommen.</p>
-                )}
+                }
             </aside>
         </div>
     )

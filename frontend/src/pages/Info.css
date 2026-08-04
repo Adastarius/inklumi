@@ -1,0 +1,68 @@
+.info-page {
+    color: #231212;
+}
+
+.info-page h2 {
+    margin-bottom: 40px;
+}
+
+.info-header-text {
+    padding: 40px 140px;
+    text-align: justify;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.card-container p {
+    background-color: #fff8f6;
+    border-radius: 32px;
+    padding: 20px 20px;
+    border: 1px solid black;
+    box-shadow: 0 2px 8px rgba(35, 18, 18, 0.2);
+    text-align: justify;
+    font-size: 16px;
+}
+
+.card-container span {
+    font-weight: 600;
+}
+
+.hint {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.mobility-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.mobility-badges div,
+.visual-badges div,
+.acoustic-badges div,
+.cognitive-badges div,
+.other-badges div {
+    background-color: #fdf9f7;
+    border-radius: 32px;
+    padding: 20px 20px;
+    width: 50%;
+    text-align: left;
+    font-size: 16px;
+    margin-right: auto;
+}
+
+.badges-container span {
+    font-weight: 600;
+}
+
+.mobility-badges div:nth-child(even) {
+    margin-left: auto;
+}

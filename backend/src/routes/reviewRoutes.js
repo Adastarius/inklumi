@@ -18,7 +18,7 @@ router.post("/", authMiddleware, async (req, res) => {
 
         const newReview = await prisma.review.create({
             data: {
-                text: text.trim() || "",
+                text: text.trim() || "Kein Bewertungstext vorhanden.",
                 placeId: Number(placeId),
                 userId: req.userId,
                 badges: {

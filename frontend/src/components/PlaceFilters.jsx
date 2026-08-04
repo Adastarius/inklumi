@@ -4,7 +4,7 @@ import { LayoutGrid, MapPin, Accessibility, Trash } from 'lucide-react'
 
 const disabilities = ["Sehbehinderung", "Hörbehinderung", "Kognitive Beeinträchtigung", "Psychische Erkrankung", "Mobilitätsbeeinträchtigung"]
 const districts = ["Charlottenburg-Wilmersdorf", "Friedrichshain-Kreuzberg", "Lichtenberg", "Marzahn-Hellersdorf", "Mitte", "Neukölln", "Pankow", "Reinickendorf", "Spandau", "Steglitz-Zehlendorf", "Tempelhof-Schöneberg", "Treptow-Köpenick"]
-const categories = ["Kultur", "Freizeit", "Gesundheit", "Essen", "Sonstiges"]
+const categories = ["Kultur", "Freizeit", "Gesundheit", "Restaurant/Café", "Supermarkt", "Sonstiges"]
 
 function PlaceFilters({ categoryFilter, setCategoryFilter, districtFilter, setDistrictFilter, disabilityFilter, setDisabilityFilter}) {
     const [openedFilter, setOpenedFilter] = useState(null)

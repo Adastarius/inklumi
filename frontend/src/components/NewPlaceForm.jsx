@@ -212,7 +212,8 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
                             <option value="Freizeit">Freizeit</option>
                             <option value="Kultur">Kultur</option>
                             <option value="Gesundheit">Gesundheit</option>
-                            <option value="Essen">Essen</option>
+                            <option value="Essen">Restaurant/Café</option>
+                            <option value="Supermarkt">Supermarkt</option>
                             <option value="Sonstiges">Sonstiges</option>
                     </select>
 

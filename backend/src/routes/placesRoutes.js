@@ -5,7 +5,7 @@ import authMiddleware from '../middleware/authMiddleware.js'
 const router = express.Router()
 
 const BERLIN_BORDER = { west: 13.088, south: 52.338, east: 13.761, north: 52.675 }
-const CATEGORIES = ['Freizeit', 'Kultur', 'Essen', 'Gesundheit', 'Sonstiges']
+const CATEGORIES = ['Freizeit', 'Kultur', 'Restaurant/Café', 'Gesundheit', 'Sonstiges', 'Supermarkt']
 
 router.get("/", async (req, res) => {
     try {
@@ -123,7 +123,7 @@ router.post('/neu', authMiddleware, async (req, res) => {
                     createdById: req.userId,
                     reviews: badgeIds?.length > 0 || reviewText ? {
                         create: {
-                            text: reviewText ? reviewText : "Kein Bewertungstext vorhanden.",
+                            text: reviewText ? reviewText.trim() : "Kein Bewertungstext vorhanden.",
                             userId: req.userId,
                             badges: { connect: (badgeIds ?? []).map((id) => ({ id })) }
                         },

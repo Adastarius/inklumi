@@ -68,7 +68,6 @@ function ReviewForm({ placeId, onNewReview }) {
                 id="review-text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                required
                 rows={4}
             />
 

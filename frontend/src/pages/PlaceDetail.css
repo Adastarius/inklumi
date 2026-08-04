@@ -6,9 +6,9 @@
 
 .place-detail-top {
     display: flex;
-    gap: 200px;
     align-items: center;
     margin-bottom: 48px;
+    justify-content: space-between;
 }
 
 .place-detail-info {
@@ -21,6 +21,9 @@
     font-size: 42px;
     color: #231212;
     margin: 0;
+    text-align: left;
+    line-height: 1.2;
+    max-width: 500px;
 }
 
 .place-detail-address {
@@ -53,7 +56,7 @@
     font-size: 16px;
     color: #231212;
     line-height: 1.7;
-    max-width: 700px;
     text-align: left;
     margin-bottom: 80px;
+    white-space: pre-wrap;
 }

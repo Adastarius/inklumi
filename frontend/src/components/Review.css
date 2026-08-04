@@ -38,7 +38,8 @@
 }
 
 .place-image {
-    max-width: 280px;
+    max-width: 300px;
+    max-height: 200px;
 }
 
 .place-info {
@@ -93,4 +94,9 @@
     align-self: flex-start;
     margin-top: 20px;
     text-align: left;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    overflow: hidden;
 }

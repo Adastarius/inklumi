@@ -1,12 +1,12 @@
 import { useParams } from'react-router-dom'
 import { useRef, useEffect, useState } from 'react'
-import { MapPin, Eye, Ear, Brain, Heart } from 'lucide-react'
+import { MapPin, Eye, Ear, Brain, HeartPulse, Accessibility } from 'lucide-react'
 import './PlaceDetail.css'
 import { apiFetch } from '../services/api.js'
 import ReviewForm from '../components/ReviewForm.jsx'
 import ReviewList from '../components/ReviewList.jsx'
 
-const badgeIcons = { Sehbehinderung: Eye, Hörbehinderung: Ear, "Kognitive Beeinträchtigung": Brain, "Psychische Erkrankung": Heart};
+const badgeIcons = { Sehbehinderung: Eye, Hörbehinderung: Ear, "Kognitive Beeinträchtigung": Brain, "Psychische Erkrankung": HeartPulse, Mobilitätsbeeinträchtigung: Accessibility};
 
 function PlaceDetail() {
     const { id } = useParams()

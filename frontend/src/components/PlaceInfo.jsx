@@ -1,12 +1,12 @@
 import './Review.css'
 import { useNavigate } from 'react-router-dom'
-import { Ear, Eye, Brain, Drama, Accessibility, MapPin, CircleX, Plus } from 'lucide-react'
+import { Ear, Eye, Brain, HeartPulse, Accessibility, MapPin, CircleX, Plus } from 'lucide-react'
 
 const badgeIcons = {
     Sehbehinderung: Eye,
     Hörbehinderung: Ear,
     "Kognitive Beeinträchtigung": Brain,
-    "Psychische Erkrankung": Drama,
+    "Psychische Erkrankung": HeartPulse,
     Mobilitätsbeeinträchtigung: Accessibility
 }
 
@@ -17,7 +17,7 @@ function PlaceInfo( { place, onClose }) {
         navigate(`/orte/${place.id}`)
     }
 
-    const visibleBadges = place.badges.slice(0, 3)
+    const visibleBadges = place.badges.slice(0, 2)
     const hiddenBadgesCount = place.badges.length - visibleBadges.length
 
     return (
@@ -42,7 +42,7 @@ function PlaceInfo( { place, onClose }) {
                     return (
                         <li key={badge.id} className="badge-pill">
                             <Icon aria-hidden="true" size={14} />
-                            {badge.name}
+                            <span>{badge.name}</span>
                         </li>
                 )})}
                 {hiddenBadgesCount > 0 && (

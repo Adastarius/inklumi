@@ -1,13 +1,13 @@
 import { useAuth } from '../context/AuthContext'
 import { apiFetch } from '../services/api'
 import './ReviewList.css'
-import { Ear, Eye, Brain, Drama, Accessibility, MapPin, Trash } from 'lucide-react'
+import { Ear, Eye, Brain, HeartPulse, Accessibility, MapPin, Trash } from 'lucide-react'
 
 const badgeIcons = {
     Sehbehinderung: Eye,
     Hörbehinderung: Ear,
     "Kognitive Beeinträchtigung": Brain,
-    "Psychische Erkrankung": Drama,
+    "Psychische Erkrankung": HeartPulse,
     Mobilitätsbeeinträchtigung: Accessibility
 }
 

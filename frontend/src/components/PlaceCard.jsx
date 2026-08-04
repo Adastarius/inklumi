@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { Eye, Ear, MapPin, Brain, Drama, Plus, Accessibility } from 'lucide-react';
+import { Eye, Ear, MapPin, Brain, HeartPulse, Plus, Accessibility } from 'lucide-react';
 import './PlaceCard.css';
 
 const badgeIcons = {
     Sehbehinderung: Eye,
     Hörbehinderung: Ear,
     "Kognitive Beeinträchtigung": Brain,
-    "Psychische Erkrankung": Drama,
+    "Psychische Erkrankung": HeartPulse,
     Mobilitätsbeeinträchtigung: Accessibility
 }
 

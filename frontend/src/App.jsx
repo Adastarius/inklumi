@@ -9,6 +9,7 @@ import Register from './pages/Register'
 import { AuthProvider } from './context/AuthContext'
 import NewPlaceForm from './components/NewPlaceForm'
 import User from './pages/User'
+import Info from './pages/Info'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/registrieren" element={<Register />} />
             <Route path="/orte/neu" element={<NewPlaceForm />} />
             <Route path="/user" element={<User />} />
+            <Route path="info" element={<Info />} />
           </Routes>
           <Footer />
         </div>
