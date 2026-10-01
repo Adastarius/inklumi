@@ -10,6 +10,8 @@ import { List, Map } from 'lucide-react'
 function Startseite() {
     const [places, setPlaces] = useState([])
     const [loadStatus, setLoadStatus] = useState("laden")
+
+    //Ändern der View (Liste oder Karte)
     const [view, setView] = useState("list")
 
     const [disabilityFilter, setDisabilityFilter] = useState([])
@@ -26,8 +28,11 @@ function Startseite() {
             .catch(() => setLoadStatus("Fehler"))
     }, [])
 
+    //Orte werden gefiltert
     const filteredPlaces = places.filter((place) => {
-        const matchingDisability = disabilityFilter.length === 0 || disabilityFilter.some((checked) => (place.badges ?? []).some((badge) => badge.category === checked));
+        //Filter enthält entweder kein Element oder mindestens ein Item des Filters passt auf den Ort
+        const matchingDisability = disabilityFilter.length === 0 || disabilityFilter.some((checked) =>
+            (place.badges ?? []).some((badge) => badge.category === checked));
         const matchingDistrict = districtFilter.length === 0 || districtFilter.includes(place.district);
         const matchingCategory = categoryFilter.length === 0 || categoryFilter.includes(place.category);
         return matchingDisability && matchingDistrict && matchingCategory;
@@ -39,30 +44,27 @@ function Startseite() {
             .catch(() => setLoadStatus("Fehler"))
     }
 
-    console.log(places)
-    console.log(filteredPlaces)
     return (
         <main>
             <section className="hero">
                 <div className="hero-text">
+
                     <h1>Entdecke barrierefreie Orte in Berlin</h1>
                     <div className="info-card">
                         <p>Mit der Filterfunktion kannst du dir Orte nach Bezirk, Beeinträchtigung 
                         oder anderen Kategorien anzeigen lassen. Füge eigene Bewertungen hinzu und markiere barrierefreie Orte!
                         </p>
-                        <a href="#places-area" className="create-review-button" onClick={() => setView("map")}>
-                            Ort bewerten
+                        <a href="#places-area" className="create-review-button">
+                            Orte entdecken
                         </a>
                     </div>
                 </div>
-
-                <img className="hero-image" src="/31751909_7840255.jpg" alt="Eine blinde Frau und ein Mann mit einer Armprothese stehen lächelnd nebeneinander" />
+            <img className="hero-image" src="/a-modern-cartoon-of-a-blind-person-with-a-dog--a-p(1)(5).jpg" alt="Drei Personen stehen mit einem Hund nebeneinander" />
+ 
             </section>
 
             <section id="places-area" className="places-section">
                 <div className="places-section-header">
-                
-
                     <PlaceFilters
                         categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter}
                         districtFilter={districtFilter} setDistrictFilter={setDistrictFilter}

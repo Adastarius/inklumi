@@ -11,18 +11,10 @@ const badgeIcons = {
     Mobilitätsbeeinträchtigung: Accessibility
 }
 
+//Bewertungsliste
 function ReviewList({ reviews, onDeleteReview }) {
-    const { token } = useAuth()
-
-    let ownUserId = null
-    if (token) {
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]))
-            ownUserId = payload.userId
-        } catch {
-            ownUserId = null
-        }
-    }
+    const { session } = useAuth()
+    const ownUserId = session?.user?.id ?? null
 
     async function handleDelete(reviewId) {
         const confirmed = window.confirm("Bewertung wirklich löschen?")
@@ -51,6 +43,7 @@ function ReviewList({ reviews, onDeleteReview }) {
                             <span className="date-info">{new Date(review.createdAt).toLocaleDateString('de-De')}</span>
                         </div>
 
+                        {/*Wenn die User ID des Reviews gleich der eigenen User ID dann Löschen Button anzeigen*/}
                         {review.userId === ownUserId && (
                             <button
                                 onClick={() => handleDelete(review.id)}
@@ -70,7 +63,7 @@ function ReviewList({ reviews, onDeleteReview }) {
                             const Icon = badgeIcons[badge.category] ?? MapPin
                             return (
                             <li key={badge.id} className="badge-pill-small">
-                                <Icon aria-hidden="true" size={14} />
+                                <Icon aria-hidden="true" size={16} />
                                 <span>{badge.name}</span>
                             </li>
                             )})}

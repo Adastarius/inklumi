@@ -10,13 +10,16 @@ const badgeIcons = {
     Mobilitätsbeeinträchtigung: Accessibility
 }
 
+//Wird von PlacesList aufgerufen
 function PlaceCard({ place }) {
     const navigate = useNavigate()
 
+    //Weiterleitung zur Detailseite
     function handleClick() {
         navigate(`/orte/${place.id}`)
     }
 
+    //Begrenzen der sichtbaren Badges auf der Card
     const visibleBadges = place.badges.slice(0, 2)
     const hiddenBadgesCount = place.badges.length - visibleBadges.length
 
@@ -26,7 +29,7 @@ function PlaceCard({ place }) {
                 <img className="place-card-image" src={place.picture} alt="" />
 
                 <div className="place-card-content">
-                    <h3>{place.name}</h3>
+                    <h2>{place.name}</h2>
 
                     <p className="place-card-address">
                         <MapPin aria-hidden="true" size={16} />
@@ -34,7 +37,7 @@ function PlaceCard({ place }) {
                     </p>
 
                     <p className="place-card-description">{place.description}</p>
-                    <span className="read-more-link">Weiterlesen</span>
+                    {/*<span className="read-more-link">Weiterlesen</span>*/}
                 </div>
                 <ul className="place-card-badges">
                     {visibleBadges.map((badge) => {

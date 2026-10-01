@@ -1,18 +1,68 @@
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 16px 32px;
-    background-color: #ffffff;
+    padding: 24px 64px;
+    background-color: #f2f2f2;
+    position: relative;
+}
+
+.header-inner {
+    display: grid;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    grid-template-columns: 1fr auto 1fr;
 }
 
 .logo {
-    width: 90px;
+    width: 150px;
+}
+
+.logo-link {
+    justify-self: start;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: #231212;
+    border-radius: 2px;
+    transition: all 0.3 ease;
+}
+
+.hamburger.open span:nth-child(1) {
+    transform: translateY(12px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-12px) rotate(-45deg);
+}
+
+.nav-wrapper {
+    display: contents;
 }
 
 .header nav ul {
     display: flex;
-    gap: 80px;
+    gap: 4rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -29,8 +79,13 @@
     text-decoration: underline;
 }
 
+.header nav {
+    justify-self: center;
+    grid-column: 2;
+}
+
 .login-button {
-    background-color: #7f5f77;
+    background-color: purple;  /*#9c8dd0*/
     color: #ffffff;
     border: none;
     border-radius: 32px;
@@ -41,6 +96,10 @@
     text-decoration: none;
 }
 
+.login-button:hover {
+    background-color: #8c5497;
+}
+
 .user-area {
     display: flex;
     align-items: center;
@@ -48,8 +107,80 @@
 }
 
 .username {
-    font-size: 14px;
+    font-size: 1rem;
     color: #231212;
     font-weight: 500;
     text-decoration: none;
+}
+
+.username:hover {
+    
+}
+
+.account-area {
+    justify-self: end;
+    grid-column: 3;
+    display: flex;
+    justify-content: flex-end;
+    min-width: clamp(100px, 12vw, 160px);
+}
+
+.login-button--solo {
+    width: 100%;
+    max-width: clamp(90px, 10vw, 120px);
+    text-align: center;
+    margin-left: auto;
+}
+
+@media (max-width:768px) {
+    .header {
+        padding: 16px 24px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-wrapper {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #f2f2f2;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+        padding: 24px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-wrapper.open {
+        display: flex;
+        z-index: 2000;
+    }
+
+    .header nav ul {
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .user-area {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .login.button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .header-inner {
+        display: flex;
+        justify-content: space-between;
+    }
 }

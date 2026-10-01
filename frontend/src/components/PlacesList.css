@@ -42,7 +42,7 @@
 .filter-label {
     display: block;
     font-size: 14px;
-    color: #4a3a35;
+    color: #231212;
 }
 
 .filter-item {
@@ -67,4 +67,43 @@
     gap: 24px;
     justify-content: center;
     flex-wrap: wrap;
+    background-color: #f2f2f2;
+    padding: 0;
+}
+
+.filter-backdrop {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .filter-grid {
+        gap: 1rem;
+    }
+
+    .filter-box {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .filter-options {
+        position: fixed;
+        left: 1rem;
+        right: 1rem;
+        top: 50%;
+        min-width: 0;
+        width: auto;
+        overflow-y: auto;
+        margin-top: 0;
+        max-height: 70vh;
+        transform: translateY(-50%);
+        z-index: 3000;
+    }
+
+    .filter-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(35, 18, 18, 0.4);
+        z-index: 2500;
+    }
 }

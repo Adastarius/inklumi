@@ -33,7 +33,7 @@
     overflow: hidden;
 }
 
-.place-card-content h3 {
+.place-card-content h2 {
     font-size: 20px;
     color: #231212;
     margin: 0;
@@ -63,10 +63,10 @@
     margin: 0;
     min-height: 39px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-clamp: 2;
+    line-clamp: 3;
 }
 
 .place-card-badges {
@@ -78,6 +78,7 @@
     margin: 0;
     align-items: center;
     padding-right: 10px;
+    padding-top: 20px;
 }
 
 .badge-pill {
@@ -96,8 +97,8 @@
 .read-more-link {
     font-size: 14px;
     font-weight: 600;
-    color: #859765;
-    text-decoration: underline;
+    color: #1d864c; /*#859765*/
+    text-decoration: bold;
     margin-bottom: 10px;
 }
 

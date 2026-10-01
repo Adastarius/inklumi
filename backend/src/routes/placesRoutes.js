@@ -9,6 +9,7 @@ const CATEGORIES = ['Freizeit', 'Kultur', 'Restaurant/Café', 'Gesundheit', 'Son
 
 router.get("/", async (req, res) => {
     try {
+        //Laden der Orte inklusive Reviews und Badges (nur approved)
         const places = await prisma.place.findMany({
             where: { status: "approved" },
             include: {
@@ -18,12 +19,15 @@ router.get("/", async (req, res) => {
             },
         });
         
+        //Orte mit Badges (keine Duplikate)
         const placesWithBadges = places.map((place) => {
+            //sammeln aller Badges aus allen Reviews in einer Liste
             const allBadges = place.reviews.flatMap((review) => review.badges)
+            //entfernen von doppelten Badges, in Map jede ID nur einmal als Schlüssel
             const reviewBadges = Array.from(
                 new Map(allBadges.map((badge) => [badge.id, badge])).values()
             )
-
+            //entfernen der Reviews eines Orts, return des Orts mit Badges (keine doppelten)
             const { reviews, ...placeWithoutReviews } = place
             return { ...placeWithoutReviews, badges: reviewBadges }
         })
@@ -37,6 +41,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
+        //Umwandlung der ID aus URL als Zahl
         const id = Number(req.params.id);
 
         const place = await prisma.place.findUnique({
@@ -61,6 +66,7 @@ router.get("/:id", async (req, res) => {
             new Map(allBadges.map((badge) => [badge.id, badge])).values()
         )
 
+        //Ort mit Bewertungen(inklusive Nutzer und Badges) und unterschiedlichen Badges
         res.json({...place, badges: uniqueBadges})
     } catch (error) {
         console.error(error)
@@ -94,6 +100,7 @@ router.post('/neu', authMiddleware, async (req, res) => {
                 return res.status(400).json({ error: "Diese Plattform ist auf Orte in Berlin spezialisiert."})
             }
 
+            //FSUche eines Ort mit demselben Namen im Umkreis von ein paar Metern
             const possibleDuplicate = await prisma.place.findFirst({
                 where: {
                     name: { equals: name.trim(), mode: 'insensitive' },
@@ -102,6 +109,7 @@ router.post('/neu', authMiddleware, async (req, res) => {
                 }
             })
 
+            //Ort wird nicht gespeichert, falls bereits angelegt in der Nähe
             if (possibleDuplicate) {
                 return res.status(409).json({
                     error: "Ein Ort mit ähnlichem Namen exisitiert bereits in der Nähe.",
@@ -109,6 +117,8 @@ router.post('/neu', authMiddleware, async (req, res) => {
                 })
             }
 
+            //Falls beim Anlegen Badges ausgwählt oder ein Review vorhanden sind, wird ein Review erzeugt
+            //die geschickten Badges werden anhand der badgeId mit der Review verbunden
             const place = await prisma.place.create({
                 data: {
                     name: name.trim(),

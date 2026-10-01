@@ -2,28 +2,21 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import './Login.css'
-import { apiFetch } from '../services/api.js'
 
 function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [username, setUsername] = useState("")
     const [error, setError] = useState(null)
-    const { login } = useAuth()
+    const { register } = useAuth()
     const navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
         setError(null)
         
-
         try {
-            const data = await apiFetch("/auth/registrieren", {
-                method: "POST",
-                body: JSON.stringify({ email, password, username })
-            })
-
-            login(data.token, data.email, data.username)
+            await register(email, password, username)
             navigate("/")
         } catch (error) {
             console.error(error)

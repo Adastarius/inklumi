@@ -11,12 +11,14 @@ function ReviewForm({ placeId, onNewReview }) {
     const [error, setError] = useState(null)
     const [isSent, setIsSent] = useState(false)
 
+    //Badges laden
     useEffect(() => {
         apiFetch("/badges")
             .then(setAllBadges)
             .catch(() => setError("Badges konnten nicht geladen werden."))
     }, [])
 
+    //Badge aus- oder abwählen
     function toggleBadge(badgeId) {
         if (selectedBadges.includes(badgeId)) {
             setSelectedBadges(selectedBadges.filter((id) => id !== badgeId))
@@ -25,6 +27,7 @@ function ReviewForm({ placeId, onNewReview }) {
         }
     }
 
+    //Bewertung an das Backend senden
     async function handleSubmit(e) {
         e.preventDefault()
         setError(null)

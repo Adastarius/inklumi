@@ -4,6 +4,7 @@ import authMiddleware from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
+//Erstellen einer neuen Bewertung
 router.post("/", authMiddleware, async (req, res) => {
     try {
         const { text, placeId, badgeIds } = req.body
@@ -13,9 +14,11 @@ router.post("/", authMiddleware, async (req, res) => {
         }
 
         if (!text.trim() && (!badgeIds || badgeIds.length === 0)) {
-            return res.status(400).json({ error: "Bitte gib einen Text ein oder wähle mindestens ein Merkmal aus.."})
+            return res.status(400).json({ error: "Bitte gib einen Text ein oder wähle mindestens ein Merkmal aus."})
         }
 
+        //mit include können Badges und User-ID sowie Username in der HTTP-Antwort direkt mitgeschickt werden
+        //ohne erneute Anfrage vom Frontend
         const newReview = await prisma.review.create({
             data: {
                 text: text.trim() || "Kein Bewertungstext vorhanden.",
@@ -38,6 +41,7 @@ router.post("/", authMiddleware, async (req, res) => {
     }
 })
 
+//Bearbeiten von Bewertungen
 router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const id = Number(req.params.id)
@@ -52,6 +56,8 @@ router.put("/:id", authMiddleware, async (req, res) => {
             return res.status(403).json({ error: "Du darfst nur eigene Bewertungen bearbeiten."})
         }
 
+        //mit set werden alle vorhanden Badges durch die neu ausgewählten ersetzt, die bagdeId wird dabei
+        //in einem Objekt gespeichert, das Prisma einem Feld in der Datenbank zuordnen kann
         const updated = await prisma.review.update({
             where: { id },
             data: {
@@ -69,6 +75,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
     }
 })
 
+//Löschen einer Bewertung
 router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const id = Number(req.params.id)

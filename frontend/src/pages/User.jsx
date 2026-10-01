@@ -1,19 +1,32 @@
 import { useAuth } from '../context/AuthContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { apiFetch } from '../services/api.js'
 import './Login.css'
+import { supabase } from '../services/supabase.js'
 
+//Benutzerseite mit Profilinformationen
 function User() {
-    const { token, email, username, login } = useAuth()
+    const { email, username, setUsername, loading } = useAuth()
+
+    //Werte für die Eingabefelder
     const [emailInput, setEmailInput] = useState(email)
     const [usernameInput, setUsernameInput] = useState(username)
+
     const [profileError, setProfileError] = useState(null)
     const [profileStatus, setProfileStatus] = useState("idle") // idle | speichern | fertig
 
-    const [currentPassword, setCurrentPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [passwordError, setPasswordError] = useState(null)
     const [passwordStatus, setPasswordStatus] = useState("idle")
+
+    //Speichern von Email und Username als Input für Eingabefelder
+    useEffect(() => {
+        if (email) setEmailInput(email)
+    }, [email])
+
+    useEffect(() => {
+        if (username) setUsernameInput(username)
+    }, [username])
 
     async function handleProfileSubmit(e) {
         e.preventDefault()
@@ -21,15 +34,24 @@ function User() {
         setProfileStatus("speichern")
 
         try {
-            const updated = await apiFetch("/auth/me", {
-                method: "PATCH",
-                body: JSON.stringify({ email: emailInput, username: usernameInput})
-            })
+            if (emailInput !== email) {
+                const { error } = await supabase.auth.updateUser({ email: emailInput })
+                if (error) throw error
+            }
 
-            login(token, updated.email, updated.username)
+            if (usernameInput !== username) {
+                //speichert den Nutzernamen in der Datenbank
+                const updated = await apiFetch("/auth/me", {
+                    method: "PATCH",
+                    body: JSON.stringify({ username: usernameInput })
+                })
+                //speichert den Nutzernamen im React-Kontext, damit er sofort angezeigt wird
+                setUsername(updated.username)
+            }
+
             setProfileStatus("fertig")
         } catch (error) {
-            setProfileError(error.mesage)
+            setProfileError(error.message || "Profil konnte nicht aktualisiert werden.")
             setProfileStatus("idle")
         }
     }
@@ -40,23 +62,26 @@ function User() {
         setPasswordStatus("speichern")
 
         try {
-            await apiFetch("/auth/me/password", {
-                method: "PATCH",
-                body: JSON.stringify({ currentPassword, newPassword })
-            })
+            const { error } = await supabase.auth.updateUser({ password: newPassword })
+            if (error) throw error
 
-            setCurrentPassword("")
             setNewPassword("")
             setPasswordStatus("fertig")
         } catch (error) {
-            setPasswordError(error.message)
+            setPasswordError(error.message || "Passwort konnte nicht geändert werden.")
             setPasswordStatus("idle")
         }
     }
 
+    if (loading) {
+        return (
+            <main className="user-page"><p>Lädt...</p></main>
+        )
+    }
+
     return (
         <main className="user-page">
-            <h2 className="user-greeting">Hallo {username}</h2>
+            <h2 className="user-greeting">Hallo {username}!</h2>
 
             <form onSubmit={handleProfileSubmit} className="profile-form">
                 <h3>Profildaten</h3>
@@ -91,21 +116,13 @@ function User() {
                     {profileStatus === "speichern" ? "Wird gesendet..." : "Profil speichern"}
                 </button>
             </form>
+            
             <form onSubmit={handlePasswordSubmit} className="password-form">
                 <h3>Passwort ändern</h3>
                 <div className="auth-input">
-                    <label htmlFor="current-password">Aktuelles Passwort</label>
+                    <label htmlFor="newPassword">Neues Passwort</label>
                     <input
-                        id="current-password"
-                        type="password"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                        required
-                    />
-
-                    <label htmlFor="new-password">Neues Passwort</label>
-                    <input
-                        id="new-password"
+                        id="newPassword"
                         type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
@@ -117,7 +134,6 @@ function User() {
                 {passwordError && (
                     <p role="alert" className="auth-error">{passwordError}</p>
                 )}
-
                 {passwordStatus === "fertig" && (
                     <p role="status">Passwort wurde geändert.</p>
                 )}
@@ -127,9 +143,6 @@ function User() {
                 </button>
             </form>
         </main>
-        
-
-
     )
 }
 

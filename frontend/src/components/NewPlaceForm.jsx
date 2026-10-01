@@ -4,9 +4,8 @@ import { useAuth } from '../context/AuthContext'
 import './NewPlace.css'
 import { useNavigate } from 'react-router-dom'
 
-const BERLIN_BORDER = { west: 13.088, south: 52.338, east: 13.761, north: 52.675 }
-
-function NewPlaceForm({ onClose, onPlaceCreated }) {
+//Formular zum Anlegen eines neuen Orts
+function NewPlaceForm() {
     const { token } = useAuth()
     const navigate = useNavigate()
 
@@ -15,28 +14,34 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
     const [category, setCategory] = useState("")
     const [description, setDescription] = useState("")
     const [coords, setCoords] = useState(null)
+    const [reviewText, setReviewText] = useState("")
+    const [district, setDistrict] = useState("")
+    const [pictureFile, setPictureFile] = useState(null)
+
+    //Adressprüfung
     const [geocodeStatus, setGeocodeStatus] = useState("idle") // idle | suche | gefunden | nicht_gefunden
+
     const [error, setError] = useState(null)
     const [isSent, setIsSent] = useState(false)
     const [selectedBadges, setSelectedBadges] = useState([])
     const [allBadges, setAllBadges] = useState([])
-    const [reviewText, setReviewText] = useState("")
-    const [district, setDistrict] = useState("")
-    const [pictureFile, setPictureFile] = useState(null)
     const [uploadStatus, setUploadStatus] = useState("idle") //idle | hochladen | fertig | fehler
 
+    //Laden der Badges
     useEffect(() => {
         apiFetch("/badges")
             .then(setAllBadges)
             .catch(() => setError("Merkmale konnten nicht geladen werden."))
     }, [])
 
+    //Ermitteln und überprüfen der Adresse
     async function handleGeocode() {
         if (!address.trim()) return
         setGeocodeStatus("suche")
         setCoords(null)
 
         try {
+            //Adresse wird als Parameter für die URL kodiert
             const result = await apiFetch(`/geocode?address=${encodeURIComponent(address)}`)
             
             if (!result.found) {
@@ -51,10 +56,12 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
             setGeocodeStatus("gefunden")
         } catch (error){
             console.error(error)
-            setGeocodeStatus("nicht_gefunden")
+            setError("Adresse kann momentan leider nicht geprüft werden.")
+            setGeocodeStatus("idle")
         }
     }
 
+    //Ort speichern
     async function handleSubmit(e) {
         e.preventDefault()
         setError(null)
@@ -66,9 +73,11 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
 
         setIsSent(true)
         try {
+            //wenn eine Bilddatei im Formular hinzugefügt wurde, wird die Funktion zum Hochladen des Bild aufgerufen
+            //beim Absenden des Formulars
             const pictureUrl = pictureFile ? await handleUploadImage(pictureFile) : null
 
-            const newPlace = await apiFetch("/orte/neu", {
+            await apiFetch("/orte/neu", {
                 method: "POST",
                 body: JSON.stringify({
                     name,
@@ -91,6 +100,7 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
         }
     }
 
+    //Badges zu den ausgewählten Badges eines Orts hinzufügen oder entfernen
     function toggleBadge(badgeId) {
         if (selectedBadges.includes(badgeId)) {
             setSelectedBadges(selectedBadges.filter((id) => id !== badgeId))
@@ -99,12 +109,15 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
         }
     }
 
+    //Bild hochladen
     async function handleUploadImage(file) {
         if (!file) return null
 
         setUploadStatus("hochladen")
 
+        //FormData() verpackt Formulardaten so, dass auch Dateien übermittelt werden können
         const formData = new FormData()
+        //Fügt die Datei unter dem Feldnamen image hinzu (muss passen zu upload.single('image) im Backend)
         formData.append('image', file)
 
         try {
@@ -124,7 +137,7 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
         } catch (error) {
             console.error(error)
             setUploadStatus("fehler")
-            return null
+            throw error
         }
     }
 
@@ -166,8 +179,8 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
                             aria-describedby="geocode-status"
                             required
                         />
-                        <button type="button" onClick={handleGeocode}>
-                            Adresse prüfen
+                        <button type="button" onClick={handleGeocode} disabled={geocodeStatus === "suche"}>
+                            {geocodeStatus === "suche" ? "Wird geprüft..." : "Adresse prüfen"}
                         </button>
                     </div>
                     
@@ -212,7 +225,7 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
                             <option value="Freizeit">Freizeit</option>
                             <option value="Kultur">Kultur</option>
                             <option value="Gesundheit">Gesundheit</option>
-                            <option value="Essen">Restaurant/Café</option>
+                            <option value="Restaurant/Café">Restaurant/Café</option>
                             <option value="Supermarkt">Supermarkt</option>
                             <option value="Sonstiges">Sonstiges</option>
                     </select>
@@ -246,6 +259,12 @@ function NewPlaceForm({ onClose, onPlaceCreated }) {
                     {error && (
                         <p role="alert" className="auth-error">
                             {error}
+                        </p>
+                    )}
+
+                    {uploadStatus === "fehler" && (
+                        <p role="alert">
+                            Bild konnte nicht hochgeladen werden.
                         </p>
                     )}
 

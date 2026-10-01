@@ -9,16 +9,17 @@
     align-items: center;
     margin-bottom: 48px;
     justify-content: space-between;
+    gap: 1rem;
 }
 
 .place-detail-info {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 2rem;
 }
 
 .place-detail-info h1 {
-    font-size: 42px;
+    font-size: 2rem;
     color: #231212;
     margin: 0;
     text-align: left;
@@ -50,6 +51,7 @@
     border-radius: 16px;
     object-fit: cover;
     max-height: 320px;
+    align-self: flex-start;
 }
 
 .place-detail-description {
@@ -59,4 +61,39 @@
     text-align: left;
     margin-bottom: 80px;
     white-space: pre-wrap;
+}
+
+@media (max-width: 48rem) {
+    .place-image {
+        
+    }
+}
+
+@media (max-width: 48rem) {
+    .place-detail {
+        padding: 1.5rem 1rem;
+    }
+
+    .place-detail-top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .place-detail-image {
+        order: -1;
+        align-self: center;
+        max-height: 20rem;
+    }
+
+    .place-detail-info h1 {
+        font-size: 1.75rem;
+        max-width: 90%;
+    }
+
+    .place-detail-description {
+        font-size: 0.925rem;
+        margin-bottom: 1rem;
+    }
 }

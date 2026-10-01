@@ -3,6 +3,7 @@ import prisma from '../config/db.js'
 
 const router = express.Router()
 
+//gibt die Badges zurück
 router.get("/", async (req, res) => {
     try {
         const badges = await prisma.badge.findMany({

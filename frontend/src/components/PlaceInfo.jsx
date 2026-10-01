@@ -10,13 +10,16 @@ const badgeIcons = {
     Mobilitätsbeeinträchtigung: Accessibility
 }
 
+//wird von MapView.jsx aufgerufen
 function PlaceInfo( { place, onClose }) {
     const navigate = useNavigate()
     
+    //Weiterleitung zur Detailseite des Orts
     function handleClick() {
         navigate(`/orte/${place.id}`)
     }
 
+    //Begrenzen der sichtbaren Badges auf der Card
     const visibleBadges = place.badges.slice(0, 2)
     const hiddenBadgesCount = place.badges.length - visibleBadges.length
 

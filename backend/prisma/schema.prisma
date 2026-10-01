@@ -29,7 +29,7 @@ model Place {
   source        String @default("user")    // "osm_import" | "user"
   status        String @default("pending") // "pending" | "approved"
   createdBy     User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  createdById   Int?
+  createdById   String?
 }
 
 model Badge {
@@ -40,10 +40,8 @@ model Badge {
 }
 
 model User {
-  id          Int @id @default(autoincrement())
-  email       String @unique
+  id          String @id
   username    String @unique
-  password    String
   createdAt   DateTime @default(now())
   reviews     Review[]
   places      Place[]
@@ -56,6 +54,14 @@ model Review {
   place         Place  @relation(fields: [placeId], references: [id])
   placeId       Int
   user          User @relation(fields: [userId], references: [id])
-  userId        Int
+  userId        String
   badges        Badge[]
+}
+
+model ContactMessage {
+  id          Int @id @default(autoincrement())
+  email       String
+  topic       String
+  message     String
+  createdAt   DateTime @default(now())
 }

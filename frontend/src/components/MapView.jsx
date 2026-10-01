@@ -15,9 +15,9 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 })
 
-//Beobachtet, wann der Kartencontainer eine feste Höhe/Breite bekommt
-//da er hidden ist beim Laden der Seite und meldet es Leaflet, damit
-//die Kachelgröße neu berechnet werden kann
+/*Beobachtet, wann der Kartencontainer eine feste Höhe/Breite bekommt
+da er hidden ist beim Laden der Seite und meldet es Leaflet, damit
+die Kachelgröße neu berechnet werden kann*/
 function InvalidateSizeOnShow() {
     const map = useMap()
 
@@ -62,7 +62,6 @@ function MapView({ places }) {
                 )}
             </div>
 
-            {/* with aria-live screenreader recognizes changes without moving focus */}
             <aside aria-live="polite" className={`map-sidepanel ${selectedPlace ? 'is-visible' : ''}`}>
                 {selectedPlace &&
                     <PlaceInfo place={selectedPlace} onClose={() => setSelectedId(null)}/>
