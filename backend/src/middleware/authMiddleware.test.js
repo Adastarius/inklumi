@@ -31,7 +31,7 @@ describe('authMiddleware', () => {
 
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({
-            fehler: 'Kein Token vorhanden. Bitte einloggen.',
+            error: 'Kein Token vorhanden. Bitte einloggen.',
         })
         expect(next).not.toHaveBeenCalled()
         expect(getUser).not.toHaveBeenCalled()
@@ -62,7 +62,7 @@ describe('authMiddleware', () => {
 
         expect(res.status).toHaveBeenCalledWith(401)
         expect(res.json).toHaveBeenCalledWith({
-            fehler: 'Token ist ungültig oder abgelaufen.',
+            error: 'Token konnte nicht geprüft werden.',
         })
         expect(next).not.toHaveBeenCalled()
     })

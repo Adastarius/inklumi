@@ -1,8 +1,8 @@
 import express from 'express'
 import multer from 'multer'
+import { randomUUID } from 'node:crypto'
 import { supabaseAdmin } from '../config/supabaseAdmin.js'
 import authMiddleware from '../middleware/authMiddleware.js'
-import crypto from 'crypto'
 import { fileTypeFromBuffer } from 'file-type'
 
 const router = express.Router()
@@ -32,7 +32,7 @@ router.post("/upload", authMiddleware, upload.single('image'), async (req, res) 
         //erzeugen der Dateiendung anhand des erkannten Typs
         const fileExtension = allowedTypes[detectedType.mime]
         //es wird ein zufälliger Dateiname gewählt, um Namenskonflikte zu vermeiden
-        const fileName = `${crypto.randomUUID()}.${fileExtension}`
+        const fileName = `${randomUUID()}.${fileExtension}`
 
         //Hochladen der Datei in den Bucket place-images, req.file.buffer ist die Datei aus dem Arebitsspeicher
         //mit contentType wird Supabase das Dateiformat mitgeteilt
