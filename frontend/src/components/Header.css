@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 24px 64px;
+    padding: 1.5rem 4rem;
     background-color: #f2f2f2;
     position: relative;
 }
@@ -16,7 +16,7 @@
 }
 
 .logo {
-    width: 150px;
+    width: 9rem;
 }
 
 .logo-link {
@@ -27,8 +27,8 @@
     display: none;
     flex-direction: column;
     justify-content: space-between;
-    width: 28px;
-    height: 28px;
+    width: 1.75rem;
+    height: 1.75rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -38,14 +38,14 @@
 
 .hamburger span {
     width: 100%;
-    height: 3px;
+    height: 0.1875rem;
     background-color: #231212;
-    border-radius: 2px;
+    border-radius: 0.125rem;
     transition: all 0.3 ease;
 }
 
 .hamburger.open span:nth-child(1) {
-    transform: translateY(12px) rotate(45deg);
+    transform: translateY(0.75rem) rotate(45deg);
 }
 
 .hamburger.open span:nth-child(2) {
@@ -53,7 +53,7 @@
 }
 
 .hamburger.open span:nth-child(3) {
-    transform: translateY(-12px) rotate(-45deg);
+    transform: translateY(0.75rem) rotate(-45deg);
 }
 
 .nav-wrapper {
@@ -72,7 +72,7 @@
     color: #231212;
     text-decoration: none;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .header nav a:hover {
@@ -88,9 +88,9 @@
     background-color: purple;  /*#9c8dd0*/
     color: #ffffff;
     border: none;
-    border-radius: 32px;
-    padding: 10px 24px;
-    font-size: 16px;
+    border-radius: 2rem;
+    padding: 0.625rem 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
@@ -103,18 +103,14 @@
 .user-area {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0.75rem;
 }
 
 .username {
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: #231212;
     font-weight: 500;
     text-decoration: none;
-}
-
-.username:hover {
-    
 }
 
 .account-area {
@@ -122,19 +118,19 @@
     grid-column: 3;
     display: flex;
     justify-content: flex-end;
-    min-width: clamp(100px, 12vw, 160px);
+    min-width: clamp(5.5rem, 12vw, 10rem);
 }
 
 .login-button--solo {
     width: 100%;
-    max-width: clamp(90px, 10vw, 120px);
+    max-width: clamp(5rem, 10vw, 8rem);
     text-align: center;
     margin-left: auto;
 }
 
 @media (max-width:768px) {
     .header {
-        padding: 16px 24px;
+        padding: 1rem 1.5rem;
     }
 
     .hamburger {
@@ -150,8 +146,8 @@
         background-color: #f2f2f2;
         flex-direction: column;
         align-items: flex-start;
-        gap: 32px;
-        padding: 24px;
+        gap: 2rem;
+        padding: 1.5rem;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
@@ -162,7 +158,7 @@
 
     .header nav ul {
         flex-direction: column;
-        gap: 16px;
+        gap: 1.5rem;
         width: 100%;
         align-items: flex-start;
     }
@@ -170,7 +166,7 @@
     .user-area {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 0.75rem;
         width: 100%;
     }
 
